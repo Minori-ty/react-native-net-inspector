@@ -1,0 +1,62 @@
+{
+  "name": "@minority/react-native-network-inspector",
+  "version": "0.1.2",
+  "description": "In-app network inspector for React Native and Expo. Captures fetch, axios and any XMLHttpRequest traffic with zero native code.",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "react-native": "dist/index.js",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "react-native",
+    "expo",
+    "network",
+    "inspector",
+    "devtools",
+    "fetch",
+    "axios",
+    "xhr",
+    "debugging"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "peerDependencies": {
+    "@expo/vector-icons": ">=14.0.0",
+    "expo-clipboard": ">=7.0.0",
+    "react": ">=18.0.0",
+    "react-native": ">=0.73.0",
+    "react-native-gesture-handler": ">=2.14.0",
+    "react-native-reanimated": ">=3.6.0",
+    "react-native-safe-area-context": ">=4.8.0"
+  },
+  "devDependencies": {
+    "@expo/vector-icons": "^15.0.2",
+    "@types/json-stringify-safe": "^5.0.3",
+    "@types/react": "^19.2.2",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "expo-clipboard": "^57.0.2",
+    "react": "^19.2.3",
+    "react-native": "^0.86.3",
+    "react-native-gesture-handler": "^2.32.0",
+    "react-native-reanimated": "^4.5.1",
+    "react-native-safe-area-context": "^5.7.0",
+    "react-native-worklets": "^0.10.1",
+    "typescript": ">=5.4.0"
+  },
+  "dependencies": {
+    "headers-polyfill": "^5.0.1",
+    "json-stringify-safe": "^5.0.1",
+    "react-native-code-highlighter": "^1.3.1",
+    "react-syntax-highlighter": "^15.6.6"
+  }
+}
