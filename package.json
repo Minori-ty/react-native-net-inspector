@@ -3,6 +3,14 @@
   "version": "0.1.2",
   "description": "In-app network inspector for React Native and Expo. Captures fetch, axios and any XMLHttpRequest traffic with zero native code.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Minori-ty/react-native-network-inspector"
+  },
+  "bugs": {
+    "url": "https://github.com/Minori-ty/react-native-network-inspector/issues"
+  },
+  "homepage": "https://github.com/Minori-ty/react-native-network-inspector",
   "publishConfig": {
     "access": "public"
   },

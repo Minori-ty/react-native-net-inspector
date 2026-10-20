@@ -1,32 +1,63 @@
 # @minority/react-native-network-inspector
 
+[![npm](https://img.shields.io/npm/v/@minority/react-native-network-inspector.svg)](https://www.npmjs.com/package/@minority/react-native-network-inspector)
+[![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 An in-app network inspector for React Native and Expo. Captures `fetch`, **axios** and any
 `XMLHttpRequest` traffic, renders it behind a draggable floating ball, and ships **zero native code** —
 so it runs in Expo Go.
 
-![https://raw.githubusercontent.com/Minori-ty/react-native-network-inspector/refs/heads/master/images/1.jpg](https://raw.githubusercontent.com/Minori-ty/react-native-network-inspector/refs/heads/master/images/1.jpg)
+- **Zero native code** — runs in Expo Go; no dev build, config plugin or native module.
+- **One patch, every client** — patching `XMLHttpRequest` captures `fetch`, axios and raw XHR in a
+  single place.
+- **Memory-bounded** — a ring buffer plus a byte budget keeps retained bodies from ballooning.
+- **Bilingual and overridable** — English and Simplified Chinese ship built in; any string can be replaced.
+- **No storage dependency** — persistence is the host app's job, so there's nothing extra to install.
 
-![https://raw.githubusercontent.com/Minori-ty/react-native-network-inspector/refs/heads/master/images/2.jpg](https://raw.githubusercontent.com/Minori-ty/react-native-network-inspector/refs/heads/master/images/2.jpg)
+<table>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/Minori-ty/react-native-network-inspector/refs/heads/master/images/1.jpg" width="400" alt="screenshot 1"></td>
+    <td><img src="https://raw.githubusercontent.com/Minori-ty/react-native-network-inspector/refs/heads/master/images/2.jpg" width="400" alt="screenshot 2"></td>
+  </tr>
+</table>
+
+## Contents
+
+- [How it works](#how-it-works)
+- [Install](#install)
+- [Usage](#usage)
+  - [Configuration](#configuration)
+  - [Language](#language)
+  - [Persisting the choice](#persisting-the-choice)
+  - [Unread tracking](#unread-tracking)
+  - [Copy feedback](#copy-feedback)
+- [Memory behaviour](#memory-behaviour)
+- [What it cannot see](#what-it-cannot-see)
+- [Caveats worth knowing](#caveats-worth-knowing)
+- [Publishing](#publishing)
+- [License](#license)
+
+## How it works
 
 ```
 ┌─────────────────────────────────────────────┐
-│  业务代码  fetch()  ·  axios                 │
+│  Your code — fetch() · axios                │
 └───────────────────┬─────────────────────────┘
                     │
 ┌───────────────────▼─────────────────────────┐
-│  拦截层  global.fetch  ·  XMLHttpRequest     │
+│  Interception — global.fetch · XHR          │
 └───────────────────┬─────────────────────────┘
                     │
 ┌───────────────────▼─────────────────────────┐
-│  核心  NetworkEntry · 环形缓冲 · 订阅        │
+│  Core — NetworkEntry · ring buffer          │
 └───────────────────┬─────────────────────────┘
                     │
 ┌───────────────────▼─────────────────────────┐
-│  UI  悬浮球  ·  全屏抽屉                     │
+│  UI — floating ball · drawer                │
 └─────────────────────────────────────────────┘
 ```
 
-## Why patching XMLHttpRequest is the whole trick
+### Why patching XMLHttpRequest is the whole trick
 
 In React Native:
 
@@ -114,7 +145,8 @@ installNetworkInspector({
 ### Language
 
 English is the default; Simplified Chinese ships with the package. Nothing is hardcoded in the
-components — every label comes from one `InspectorStrings` object.
+components — every label comes from one `InspectorStrings` object. The panel's header carries a
+built-in **EN / 中文** switch, so your users flip the language with zero code from you.
 
 ```tsx
 <NetworkInspector locale="zh-CN" />
@@ -142,9 +174,6 @@ const fr: InspectorStrings = { ...en, panelTitle: 'Réseau', /* … */ };
 ```
 
 ### Persisting the choice
-
-The panel ships a built-in **EN / 中文 switch** in its header, so your users change the language
-with zero code from you — the example app is deliberately just `<NetworkInspector />`.
 
 The package ships **no** storage dependency, so persisting the choice is the host app's job. Read
 the saved value on startup, pass it as `locale`, and write it back through `onLocaleChange` (the
@@ -238,11 +267,13 @@ plugin, which would rule out Expo Go.
 ## Publishing
 
 ```sh
-cd packages/react-native-net-inspector
 npm run typecheck
 npm run build      # emits dist/ — this is the artifact that gets published
 npm publish
 ```
+
+Or push a `v*` tag: the workflow in [`.github/workflows/publish.yml`](.github/workflows/publish.yml)
+verifies the tag matches `package.json`'s `version`, then typechecks, builds and publishes.
 
 The package publishes compiled JavaScript in `dist/` (with `.d.ts` types), not the TypeScript
 source, so the published artifact runs in any bundler without the consumer taking a build step.
