@@ -236,23 +236,58 @@ function snapshotFormData(form: FormData, limit: number): BodySnapshot {
 }
 
 /**
- * React Native's FormData exposes its entries through `getParts()`; the web
- * implementation only has the private `_parts`. Both are read defensively.
+ * React Native's FormData exposes its entries through `getParts()`. Those parts
+ * are plain objects — `{ fieldName, string }` for text and
+ * `{ fieldName, uri, name, type }` for files — not `[name, value]` tuples.
+ * The web implementation only has the private `_parts` array of tuples.
+ *
+ * Both shapes are normalized here. Array-destructuring a `getParts()` object
+ * throws "Invalid attempt to destructure non-iterable instance" on Hermes, and
+ * that throw escapes the fetch/XHR patch and aborts the request being observed
+ * (photo uploads via FormData fail before they are sent).
  */
 function readFormParts(form: FormData): Array<[string, unknown]> {
   const candidate = form as unknown as { getParts?: () => unknown; _parts?: unknown };
   try {
     if (typeof candidate.getParts === 'function') {
       const parts = candidate.getParts();
-      if (Array.isArray(parts)) return parts as Array<[string, unknown]>;
+      if (Array.isArray(parts)) return normalizeFormParts(parts);
     }
     if (Array.isArray(candidate._parts)) {
-      return candidate._parts as Array<[string, unknown]>;
+      return normalizeFormParts(candidate._parts);
     }
   } catch {
     // A FormData implementation we cannot introspect — report it as opaque.
   }
   return [];
+}
+
+function normalizeFormParts(parts: unknown[]): Array<[string, unknown]> {
+  const normalized: Array<[string, unknown]> = [];
+  for (const part of parts) {
+    const entry = normalizeFormPart(part);
+    if (entry) normalized.push(entry);
+  }
+  return normalized;
+}
+
+function normalizeFormPart(part: unknown): [string, unknown] | null {
+  if (Array.isArray(part)) {
+    const key = part[0];
+    return [typeof key === 'string' ? key : String(key ?? ''), part[1]];
+  }
+  if (!part || typeof part !== 'object') return null;
+
+  const record = part as { fieldName?: unknown; name?: unknown; string?: unknown };
+  // `name` on a file part is the filename. The form field is `fieldName`.
+  const key =
+    typeof record.fieldName === 'string'
+      ? record.fieldName
+      : typeof record.name === 'string'
+        ? record.name
+        : '';
+  if (typeof record.string === 'string') return [key, record.string];
+  return [key, part];
 }
 
 function describeFormValue(value: unknown): string {
