@@ -1,6 +1,6 @@
-# @minority/react-native-network-inspector
+# react-native-net-inspector
 
-[![npm](https://img.shields.io/npm/v/@minority/react-native-network-inspector.svg)](https://www.npmjs.com/package/@minority/react-native-network-inspector)
+[![npm](https://img.shields.io/npm/v/react-native-net-inspector.svg)](https://www.npmjs.com/package/react-native-net-inspector)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 An in-app network inspector for React Native and Expo. Captures `fetch`, **axios** and any
@@ -16,8 +16,8 @@ so it runs in Expo Go.
 
 <table>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/Minori-ty/react-native-network-inspector/refs/heads/master/images/1.jpg" width="400" alt="screenshot 1"></td>
-    <td><img src="https://raw.githubusercontent.com/Minori-ty/react-native-network-inspector/refs/heads/master/images/2.jpg" width="400" alt="screenshot 2"></td>
+    <td><img src="https://raw.githubusercontent.com/Minori-ty/react-native-net-inspector/refs/heads/master/images/1.jpg" width="400" alt="screenshot 1"></td>
+    <td><img src="https://raw.githubusercontent.com/Minori-ty/react-native-net-inspector/refs/heads/master/images/2.jpg" width="400" alt="screenshot 2"></td>
   </tr>
 </table>
 
@@ -72,7 +72,7 @@ only to capture the richer detail that XHR cannot see (`Request` objects, `init.
 ## Install
 
 ```sh
-npm install @minority/react-native-network-inspector
+npm install react-native-net-inspector
 ```
 
 Peer dependencies: `react`, `react-native`, `@expo/vector-icons`, `expo-clipboard`,
@@ -100,7 +100,7 @@ Two steps. Start capture as early as possible, and render the UI near the root.
 ```tsx
 // app/_layout.tsx
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { installNetworkInspector, NetworkInspector } from '@minority/react-native-network-inspector';
+import { installNetworkInspector, NetworkInspector } from 'react-native-net-inspector';
 
 installNetworkInspector(); // must run before any request is issued
 
@@ -168,7 +168,7 @@ functions, so word order stays yours:
 `en` and `zhCN` are exported if you would rather build a full bundle by spreading one:
 
 ```tsx
-import { en, type InspectorStrings } from '@minority/react-native-network-inspector';
+import { en, type InspectorStrings } from 'react-native-net-inspector';
 
 const fr: InspectorStrings = { ...en, panelTitle: 'Réseau', /* … */ };
 ```

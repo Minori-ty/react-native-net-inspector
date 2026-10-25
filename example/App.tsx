@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import {
   installNetworkInspector,
   NetworkInspector,
-} from '@minority/react-native-network-inspector';
+} from 'react-native-net-inspector';
 
 // Before any request is issued — module scope of the root file is early enough.
 // Default config reveals every header (this is a dev-only debugging surface).
